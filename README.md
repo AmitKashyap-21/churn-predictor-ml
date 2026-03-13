@@ -1,198 +1,252 @@
-# Customer Churn Prediction
+# Customer Churn Prediction – End-to-End Machine Learning Project
 
-A production-grade machine learning pipeline for predicting telecom customer churn. This project demonstrates an end-to-end data science workflow: exploratory analysis, feature engineering, model comparison, and interpretability using SHAP.
+Predicting customer churn is critical for subscription-based businesses such as telecom providers. Losing a customer is significantly more expensive than retaining one, so identifying high-risk customers early can help companies take proactive retention actions.
 
-**Why it matters:** Customer acquisition costs significantly more than retention. Identifying at-risk customers early enables proactive intervention and measurable ROI.
+This project builds a **complete machine learning pipeline** that predicts telecom customer churn and provides an **interactive frontend interface** for testing predictions.
 
-## Objectives
+The workflow covers:
 
-This project demonstrates core data science competencies:
+* Data exploration
+* Data preprocessing
+* Feature engineering
+* Model training and evaluation
+* Model explainability
+* Interactive prediction UI using Streamlit
 
-- **Reproducibility** — Clean, documented workflow that others can extend
-- **Model Selection** — Rigorous comparison across multiple algorithms with appropriate metrics
-- **Feature Analysis** — Understanding which variables drive business outcomes
-- **Interpretability** — Using SHAP to explain individual predictions and feature importance
-- **Production Quality** — Modular code structure, proper separation of concerns, reusable components
+---
 
-## Dataset
+# Project Overview
 
-**Source:** Telco Customer Churn (IBM sample dataset)  
-[https://www.kaggle.com/datasets/blastchar/telco-customer-churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+The goal of this project is to predict whether a telecom customer is likely to cancel their service based on customer attributes such as:
 
-**Dataset Characteristics:**
-- 7,043 customer records
-- 21 features (13 categorical, 8 numerical)
-- Binary classification: Churn (Yes/No)
-- ~27% positive class imbalance
+* tenure
+* contract type
+* monthly charges
+* technical support availability
+* payment method
 
-**Key Features:**
+The trained model helps identify **customers at risk of leaving** so businesses can intervene early.
 
-| Feature | Type | Description |
-|---------|------|-------------|
-| `tenure` | Numerical | Months as customer |
-| `MonthlyCharges` | Numerical | Monthly service cost |
-| `Contract` | Categorical | Month-to-month, one-year, or two-year |
-| `InternetService` | Categorical | DSL, fiber optic, or no service |
-| `TechSupport` | Categorical | Customer has tech support |
+---
 
-**Target Variable:** `Churn` (0 = retained, 1 = churned)
+# Dataset
 
-## Methodology
+Dataset used: **Telco Customer Churn Dataset**
 
-The analysis follows the standard ML workflow:
+Source:
+https://www.kaggle.com/datasets/blastchar/telco-customer-churn
 
-```
-Data Acquisition
-       ↓
-Exploratory Data Analysis (EDA)
-       ↓
-Data Cleaning & Preprocessing
-       ↓
-Feature Engineering & Selection
-       ↓
-Model Training & Hyperparameter Tuning
-       ↓
-Model Evaluation & Comparison
-       ↓
-Interpretability Analysis (SHAP)
-```
+Dataset characteristics:
 
-## Project Structure
+* ~7,000 customer records
+* 21 features
+* Mix of categorical and numerical variables
+* Binary classification problem
+
+Target variable:
 
 ```
-week01-churn-predictor/
+Churn
+0 → Customer stays
+1 → Customer leaves
+```
+
+---
+
+# Machine Learning Pipeline
+
+The project follows a standard data science workflow:
+
+```
+Raw Data
+↓
+Exploratory Data Analysis
+↓
+Data Cleaning
+↓
+Feature Encoding
+↓
+Model Training
+↓
+Model Evaluation
+↓
+Model Explainability
+↓
+Interactive Prediction UI
+```
+
+---
+
+# Models Used
+
+Three machine learning models were trained and compared.
+
+| Model               | Purpose                            |
+| ------------------- | ---------------------------------- |
+| Logistic Regression | Baseline interpretable model       |
+| Random Forest       | Handles nonlinear patterns         |
+| Gradient Boosting   | Strong performance on tabular data |
+
+Evaluation metrics used:
+
+* ROC-AUC
+* Precision
+* Recall
+* Confusion Matrix
+* Classification Report
+
+---
+
+# Model Performance
+
+| Model               | ROC-AUC |
+| ------------------- | ------- |
+| Logistic Regression | ~0.84   |
+| Random Forest       | ~0.86   |
+| Gradient Boosting   | ~0.87   |
+
+Gradient Boosting achieved the best performance on the dataset.
+
+---
+
+# Model Explainability
+
+The project uses **SHAP (SHapley Additive Explanations)** to interpret predictions.
+
+Key churn drivers identified:
+
+* Month-to-month contracts
+* Higher monthly charges
+* Low customer tenure
+* Lack of technical support
+
+These insights align with real telecom business patterns.
+
+---
+
+# Interactive Frontend (Streamlit)
+
+An interactive **Streamlit UI** allows users to input customer details and instantly predict churn risk.
+
+Users can:
+
+* Enter customer attributes
+* Predict churn probability
+* Identify high-risk customers
+
+Run the app locally:
+
+```
+streamlit run app.py
+```
+
+The application will launch at:
+
+```
+http://localhost:8501
+```
+<img width="1155" height="859" alt="image" src="https://github.com/user-attachments/assets/2757100b-778e-45f3-a88d-d5d9e7f87769" />
+
+---
+
+# Project Structure
+
+```
+churn-predictor-ml
 │
-├── data/
-│   ├── raw/                    # Original dataset
-│   └── processed/              # Cleaned, ready to model
+├── data
+│   ├── raw
+│   └── processed
 │
-├── notebooks/
-│   ├── 01_eda.ipynb            # Exploration & analysis
-│   ├── 02_preprocessing.ipynb   # Cleaning & feature engineering
-│   ├── 03_modeling.ipynb        # Training & evaluation
-│   └── 04_explainability.ipynb  # SHAP analysis
+├── notebooks
+│   ├── 01_eda.ipynb
+│   ├── 02_preprocessing.ipynb
+│   ├── 03_modeling.ipynb
+│   └── 04_explainability.ipynb
 │
-├── models/
-│   └── churn_model.pkl         # Final trained model
+├── models
+│   └── churn_model.pkl
 │
-├── outputs/
-│   ├── figures/                # Plots & visualizations
-│   └── reports/                # Summary results
+├── outputs
+│   ├── figures
+│   └── reports
 │
-├── src/
-│   ├── preprocess.py           # Reusable preprocessing functions
-│   └── evaluate.py             # Evaluation helpers
+├── src
+│   ├── preprocess.py
+│   └── evaluate.py
 │
+├── app.py
 ├── requirements.txt
 └── README.md
 ```
 
-## Models Evaluated
+---
 
-Three classification algorithms were trained and compared:
+# Installation
 
-| Model | Rationale |
-|-------|-----------|
-| Logistic Regression | Interpretable baseline; provides probability estimates |
-| Random Forest | Captures non-linear relationships; feature importance estimates |
-| Gradient Boosting (XGBoost) | State-of-the-art performance; handles feature interactions |
+Clone the repository:
 
-**Evaluation Metrics:** ROC-AUC, precision, recall, F1-score, confusion matrix
-
-## Results
-
-| Model | ROC-AUC | Precision | Recall |
-|-------|---------|-----------|--------|
-| Logistic Regression | 0.840 | 0.65 | 0.58 |
-| Random Forest | 0.863 | 0.68 | 0.61 |
-| Gradient Boosting | 0.874 | 0.71 | 0.64 |
-
-**Key Finding:** Gradient Boosting achieved the best performance, with 3.4% AUC improvement over the baseline. The model generalizes well with balanced precision-recall tradeoff suitable for intervention strategies.
-
-## Feature Importance & Business Insights
-
-SHAP analysis reveals key churn drivers:
-
-1. **Contract Type** — Month-to-month contracts show 3x higher churn risk. Customers without lock-in terms leave at elevated rates.
-
-2. **Tenure** — Early churn dominates; 80% of churners leave within first 6 months. Onboarding quality is critical.
-
-3. **Monthly Charges** — Strong positive correlation with churn. Premium-tier customers may face value-realization challenges.
-
-4. **Technical Support** — Lack of support significantly increases churn probability, suggesting service quality issues directly impact retention.
-
-**Business Implication:** Targeting month-to-month customers with support bundles or contract incentives in the first 6 months could yield highest ROI.
-
-## Outputs
-
-The project generates the following visualizations:
-
-- **EDA Plots** — Distribution analysis, missing values, churn baseline
-- **Correlation Matrices** — Feature relationships and multicollinearity assessment
-- **Model Comparison** — ROC curves, precision-recall curves, confusion matrices
-- **SHAP Visualizations** — Feature importance, partial dependence, individual prediction explanations
-
-All outputs saved to `outputs/figures/`
-
-## Getting Started
-
-### Installation
-
-```bash
+```
 git clone https://github.com/AmitKashyap-21/churn-predictor-ml.git
 cd churn-predictor-ml
+```
+
+Install dependencies:
+
+```
 pip install -r requirements.txt
 ```
 
-### Running the Analysis
+---
 
-```bash
-jupyter notebook
+# Running the Project
+
+Run the notebooks in order:
+
+```
+01_eda.ipynb
+02_preprocessing.ipynb
+03_modeling.ipynb
+04_explainability.ipynb
 ```
 
-Execute notebooks sequentially:
+To launch the interactive UI:
 
-1. `01_eda.ipynb` — Data exploration and profiling
-2. `02_preprocessing.ipynb` — Cleaning and feature engineering
-3. `03_modeling.ipynb` — Model training and evaluation
-4. `04_explainability.ipynb` — SHAP analysis and interpretation
-
-## Requirements
-
-- Python 3.8+
-- pandas — Data manipulation and analysis
-- numpy — Numerical computing
-- scikit-learn — Machine learning algorithms and evaluation
-- xgboost — Gradient boosting framework
-- shap — Model interpretability
-- matplotlib & seaborn — Data visualization
-- jupyter — Interactive notebooks
-
-See `requirements.txt` for full dependency list.
-
-## Future Work
-
-- **Hyperparameter Optimization** — Systematic grid/random search with cross-validation
-- **Class Imbalance Strategies** — SMOTE, class weighting, threshold optimization
-- **Feature Selection** — RFE, permutation importance for dimensionality reduction
-- **Model Deployment** — REST API using FastAPI, containerization with Docker
-- **Monitoring Pipeline** — Model drift detection, performance tracking in production
-- **Interactive Dashboard** — Streamlit/Dash application for non-technical stakeholders
-
-## Summary
-
-This project demonstrates proficiency in:
-
-- **Data Science Fundamentals** — EDA, data cleaning, feature engineering
-- **Machine Learning** — Model selection, training, hyperparameter tuning, evaluation
-- **Model Interpretability** — SHAP analysis, feature importance, business translation
-- **Software Engineering** — Code organization, documentation, reproducibility
-- **Business Acumen** — Translating model findings into actionable insights
-
-The pipeline is production-ready and extensible for real-world deployment.
+```
+streamlit run app.py
+```
 
 ---
 
-**Amit Kashyap**
+# Technologies Used
 
-[GitHub](https://github.com/AmitKashyap-21)
+* Python
+* Pandas
+* NumPy
+* Scikit-learn
+* SHAP
+* Matplotlib
+* Seaborn
+* Streamlit
+* Jupyter Notebook
+
+---
+
+# Future Improvements
+
+Potential improvements for the project:
+
+* Hyperparameter optimization
+* Model deployment using FastAPI
+* Real-time churn prediction pipeline
+* Interactive churn dashboard
+* Monitoring model drift in production
+
+---
+
+# Author
+
+Amit Kashyap
+
+GitHub
+https://github.com/AmitKashyap-21
